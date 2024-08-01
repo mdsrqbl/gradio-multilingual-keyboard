@@ -1,0 +1,25 @@
+{
+  "name": "gradio_multilingual_keyboard",
+  "version": "0.1.13",
+  "description": "Gradio UI packages",
+  "type": "module",
+  "author": "",
+  "license": "ISC",
+  "private": false,
+  "main_changeset": true,
+  "exports": {
+    ".": "./Index.svelte",
+    "./example": "./Example.svelte",
+    "./package.json": "./package.json"
+  },
+  "dependencies": {
+    "@gradio/atoms": "0.6.1",
+    "@gradio/icons": "0.3.4",
+    "@gradio/statustracker": "0.4.10",
+    "@gradio/utils": "0.3.0",
+    "magic-string": "^0.30.11"
+  },
+  "devDependencies": {
+    "@gradio/preview": "^0.10.2"
+  }
+}
