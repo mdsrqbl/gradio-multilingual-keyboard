@@ -27,6 +27,8 @@ if __name__ == "__main__":
     gradio_app.launch()
 ```
 
+![gradio_multilingual_keyboard_demo](https://github.com/user-attachments/assets/043c1d2c-0262-4620-8b15-5a1ae7090f77)
+
 ## Language Support
 
 - [x] English
@@ -64,3 +66,10 @@ cd ..
 ```bash
 gradio cc dev
 ```
+
+> ♻ Launching demo/app.py in reload mode
+>
+> Backend Server:  http://127.0.0.1:7860
+> 
+> Frontend Server (Go here): http://localhost:7861/
+
