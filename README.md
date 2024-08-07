@@ -5,7 +5,7 @@ A Custom Gradio component to type any language's text via on-screen buttons and 
 
 1. [gradio\_multilingual\_keyboard](#gradio_multilingual_keyboard)
    1. [Example usage](#example-usage)
-   2. [Language Support](#language-support)
+   2. [Supported Languages](#supported-languages)
    3. [To Do](#to-do)
    4. [Dev Setup](#dev-setup)
 
@@ -14,6 +14,11 @@ A Custom Gradio component to type any language's text via on-screen buttons and 
 ```bash
 pip install gradio-multilingual-keyboard
 ```
+
+> [!Note]
+> to install the compoent directly from the repository in an app, first run `gradio cc build` to generate index.js and style.css files.
+
+<br>
 
 ```python
 import gradio as gr
@@ -29,7 +34,7 @@ if __name__ == "__main__":
 
 ![gradio_multilingual_keyboard_demo](https://github.com/user-attachments/assets/043c1d2c-0262-4620-8b15-5a1ae7090f77)
 
-## Language Support
+## Supported Languages
 
 - [x] English
 - [x] Urdu
@@ -37,11 +42,16 @@ if __name__ == "__main__":
 
 ## To Do
 
+edit `frontend/index.svelte`:
 - while a button is active or a corresponding key is down, turn it primary
 - submit button does not work after text is written via virtual keyboard
 - map physical keys to unicode
 - update transliteration for keystrokes, backspace, cut, paste, etc.
 - prepend a transliteration label
+- When <kbd>shift</kbd> is pressed on virtual keyboard, keep it active until another key is pressed
+- if <kbd>shift</kbd> or <kbd>Caps</kbd> is pressed on virtual keyboard, physical keyboard should also write accordingly
+- add a switch for standard and phonetic keyboards for each language
+- add support for top 50 languages, you may use a library.
 
 ## Dev Setup
 
@@ -59,7 +69,6 @@ pip install -e .
 ```bash
 cd frontend
 npm install
-npm run build
 cd ..
 ```
 
@@ -72,4 +81,3 @@ gradio cc dev
 > Backend Server:  http://127.0.0.1:7860
 > 
 > Frontend Server (Go here): http://localhost:7861/
-
