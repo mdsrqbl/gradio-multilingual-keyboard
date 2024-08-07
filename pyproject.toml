@@ -13,7 +13,7 @@ description = "Gradio component for a multilieyboard (virtual and key-mapping ba
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.8"
-authors = [{ name = "YOUR NAME", email = "YOUREMAIL@domain.com" }]
+authors = [{ name = "Mudassar iqbal", email = "mdsriqb@gmail.com" },]
 keywords = ["gradio-custom-component", "gradio-template-SimpleTextbox", "gradio", "keyboard", "multilingual", "virtual-keyboard", "onscrean-keyboard", "unicode-key-mapping"]
 # Add dependencies here
 dependencies = ["gradio>=4.0,<5.0"]
