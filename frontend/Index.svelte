@@ -71,7 +71,6 @@
       class="scroll-hide"
       bind:value
       bind:this={keyboard.targetElement}
-      on:input={handleKeysChange}
       {placeholder}
       disabled={!interactive}
       dir={keyboard.isCurLanguageRTL() ? "rtl" : "ltr"}
@@ -98,7 +97,11 @@
   </div>
 
   {#if expanded}
-    <div class="keyboard" transition:fly={{ y: 20, duration: 200 }}>
+    <div
+      class="keyboard"
+      transition:fly={{ y: 20, duration: 200 }}
+      on:input={handleKeysChange}
+    >
       {#each keys as row, rowIndex}
         <!-- {#each keys as row, rowIndex} -->
         {#each row as key, keyIndex}
@@ -106,7 +109,10 @@
             class="key svelte-cmf5ev secondary {key.isSpecial ? 'special' : ''}"
             style="grid-column: span {key.span}"
             id="key-{key.middleStr}"
-            on:mousedown={(e) => key.onMouseDown(e)}
+            on:mousedown={(e) => {
+              key.onMouseDown(e);
+              handleKeysChange();
+            }}
             on:mouseup={(e) => key.onMouseUp(e)}
             role="button"
             tabindex="0"
