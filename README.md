@@ -37,7 +37,7 @@ if __name__ == "__main__":
 ## Supported Languages
 
 - [x] English
-- [x] Urdu
+- [ ] Urdu
 - [ ] Hindi
 
 ## To Do
