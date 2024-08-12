@@ -2,9 +2,9 @@ import { IKeyboard } from "../ikeyboard";
 
 
 class Key {
-    upperStr: string = "";
-    middleStr: string = "";
-    lowerStr: string = "";
+    upperText: string = "";
+    middleText: string = "";
+    lowerText: string = "";
     primaryStrIdx: number = 0;
     isSpecial: boolean = false;
     span: number = 1;
@@ -15,9 +15,9 @@ class Key {
     states: object = {};
 
     constructor(
-        upperStr: string = "",
-        middleStr: string = "",
-        lowerStr: string = "",
+        upperText: string = "",
+        middleText: string = "",
+        lowerText: string = "",
         primaryStrIdx: number = 0,
         isSpecial: boolean = false,
         span: number = 1,
@@ -26,9 +26,9 @@ class Key {
         onMouseDown: Function = () => { },
         onMouseUp: Function = () => { },
     ) {
-        this.upperStr = upperStr;
-        this.middleStr = middleStr;
-        this.lowerStr = lowerStr;
+        this.upperText = upperText;
+        this.middleText = middleText;
+        this.lowerText = lowerText;
         this.primaryStrIdx = primaryStrIdx;
         this.isSpecial = isSpecial;
         this.span = span;
