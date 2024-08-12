@@ -36,7 +36,7 @@ export function isSpecialKey(key: string): boolean {
 
 function getModifiedValueOnKeyPress(curValue: string, key_str: string, states: object): string {
 
-    const shift = Boolean(states["shift"]);
+    const shift = Boolean(states["shift"]) || Boolean(states["caps"]);
 
     if (key_str.length === 1) {
         curValue += shift ? key_str.toUpperCase() : key_str.toLowerCase();
@@ -57,7 +57,7 @@ export function getMouseDownFunction(key_str: string, callingKeyset: KeySet) {
 
     let customMouseDownFn = () => {
 
-        if (key_str.toLowerCase() in ["shift", "ctrl", "alt", 'caps']) {
+        if (["shift", "ctrl", "alt", "caps"].includes(key_str.toLowerCase())) {
             let curKeyState = Boolean(callingKeyset.containingKeyboard.states[key_str.toLowerCase()]);
             callingKeyset.containingKeyboard.states[key_str.toLowerCase()] = !curKeyState;
         }

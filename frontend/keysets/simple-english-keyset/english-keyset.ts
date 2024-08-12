@@ -1,13 +1,14 @@
 import { IKeyboard } from "../../ikeyboard";
 import { Key, KeySet } from "../keyset";
 import { getSimpleKeyboardKeySpan, getMouseDownFunction, isSpecialKey } from "../utils";
-import { shiftedKeysLayout, unshiftedKeysLayout } from "./simple-english-keys-layout";
+import { shiftedKeysLayout, unshiftedKeysLayout, capsKeysLayout } from "./simple-english-keys-layout";
 
 
 export class EnglishKeySet implements KeySet {
 
     private shiftedKeys: Key[][] = [];
     private unShiftedKeys: Key[][] = [];
+    private capsKeys: Key[][] = [];
     languageName: string = "English";
     containingKeyboard: IKeyboard;
 
@@ -15,6 +16,7 @@ export class EnglishKeySet implements KeySet {
 
         this.unShiftedKeys = this.getKeyListsFromLayout(unshiftedKeysLayout);
         this.shiftedKeys = this.getKeyListsFromLayout(shiftedKeysLayout);
+        this.capsKeys = this.getKeyListsFromLayout(capsKeysLayout);
 
     }
 
@@ -61,7 +63,11 @@ export class EnglishKeySet implements KeySet {
     getKeys(): Key[][] {
         if (this.containingKeyboard.states["shift"]) {
             return this.shiftedKeys;
-        } else {
+        }
+        else if (this.containingKeyboard.states["caps"]) {
+            return this.capsKeys;
+        }
+        else {
             return this.unShiftedKeys;
         }
     }

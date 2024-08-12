@@ -43,3 +43,26 @@ export const shiftedKeysLayout = [
     ["Shift", "Z", "X", "C", "V", "B", "N", "M", "<", ">", "?", "Shift"],
     ["Ctrl", "Alt", "Space", "Alt", "Ctrl"],
 ];
+
+export const capsKeysLayout = [
+    [
+        "`",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "0",
+        "-",
+        "=",
+        "Delete",
+    ],
+    ["Tab", "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "[", "]", "\\"],
+    ["Caps", "A", "S", "D", "F", "G", "H", "J", "K", "L", ";", "'", "Enter"],
+    ["Shift", "Z", "X", "C", "V", "B", "N", "M", ",", ".", "/", "Shift"],
+    ["Ctrl", "Alt", "Space", "Alt", "Ctrl"],
+];
