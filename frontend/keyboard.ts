@@ -31,7 +31,6 @@ export class Keyboard implements IKeyboard {
     }
 
     toggle(): void {
-        console.log(this);
         this.expanded = !this.expanded;
     }
 

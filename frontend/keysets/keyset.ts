@@ -1,4 +1,4 @@
-import { IKeyboard } from "./ikeyboard";
+import { IKeyboard } from "../ikeyboard";
 
 
 class Key {
@@ -39,15 +39,11 @@ class Key {
     }
 }
 
-class KeySet {
-    languageName: string = "";
-    protected containingKeyboard: IKeyboard;
-    getKeys(): Key[][] {
-        return [];
-    }
-    isLanguageRTL() {
-        return false;
-    }
+interface KeySet {
+    languageName: string;
+    containingKeyboard: IKeyboard;
+    getKeys(): Key[][];
+    isLanguageRTL();
 }
 
 export { Key, KeySet };

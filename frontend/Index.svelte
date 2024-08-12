@@ -9,7 +9,7 @@
   import { fly } from "svelte/transition";
 
   import { Keyboard } from "./keyboard";
-  import { EnglishKeySet } from "./english-keyset";
+  import { EnglishKeySet } from "./keysets/simple-english-keyset/english-keyset";
 
   export let gradio: Gradio<{
     change: never;
