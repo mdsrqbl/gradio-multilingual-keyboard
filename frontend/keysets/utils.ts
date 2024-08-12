@@ -13,7 +13,7 @@ export function getSimpleKeyboardKeySpan(key: string): number {
                 key === "Alt" ||
                 key === "Caps"
                 ? 4
-                : key === "Tab" || key === "\\"
+                : key === "Tab" || key === "\\" || key === "|"
                     ? 3
                     : 2;
 }
