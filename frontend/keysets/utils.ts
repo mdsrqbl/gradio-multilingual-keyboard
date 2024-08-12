@@ -57,7 +57,7 @@ export function getMouseDownFunction(key_str: string, callingKeyset: KeySet) {
 
     let customMouseDownFn = () => {
 
-        if (key_str.toLowerCase() in ["shift", "ctrl", "alt"]) {
+        if (key_str.toLowerCase() in ["shift", "ctrl", "alt", 'caps']) {
             let curKeyState = Boolean(callingKeyset.containingKeyboard.states[key_str.toLowerCase()]);
             callingKeyset.containingKeyboard.states[key_str.toLowerCase()] = !curKeyState;
         }
@@ -77,6 +77,9 @@ export function getMouseDownFunction(key_str: string, callingKeyset: KeySet) {
                 let modifiedValue = getModifiedValueOnKeyPress(curValue, key_str, callingKeyset.containingKeyboard.states);
                 callingKeyset.containingKeyboard.targetElement = modifiedValue;
             }
+
+            callingKeyset.containingKeyboard.states["shift"] = false;
+
         }
 
         if (callingKeyset.containingKeyboard.targetElement instanceof HTMLElement) {

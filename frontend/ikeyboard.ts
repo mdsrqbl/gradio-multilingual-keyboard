@@ -1,4 +1,5 @@
-import { Key } from "./keyset";
+import { Key } from "./keysets/keyset";
+
 
 export interface IKeyboard {
 

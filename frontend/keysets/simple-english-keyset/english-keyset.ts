@@ -4,7 +4,6 @@ import { getSimpleKeyboardKeySpan, getMouseDownFunction, isSpecialKey } from "..
 import { shiftedKeysLayout, unshiftedKeysLayout } from "./simple-english-keys-layout";
 
 
-
 export class EnglishKeySet implements KeySet {
 
     private shiftedKeys: Key[][] = [];
@@ -30,9 +29,9 @@ export class EnglishKeySet implements KeySet {
                 let onMouseDownFunction = getMouseDownFunction(key_str, this);
 
                 // TODO implement later as needed.
-                let onDownFunction = () => {};
-                let onUpFunction = () => {};
-                let onMouseUpFunction = () => {};
+                let onDownFunction = () => { };
+                let onUpFunction = () => { };
+                let onMouseUpFunction = () => { };
 
                 keys.push(
                     new Key(
