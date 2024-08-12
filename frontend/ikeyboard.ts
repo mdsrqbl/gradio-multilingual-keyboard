@@ -10,8 +10,10 @@ export interface IKeyboard {
 
     selectedLanguage: string;
 
+    onEnter: Function | null;
+
     toggle(): void;
     getKeys(): Key[][];
-    isCurLanguageRTL(): boolean;
+    isCurrentLanguageRTL(): boolean;
     getAllLanguageNames(): string[];
 }

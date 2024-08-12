@@ -29,7 +29,7 @@
   export let interactive: boolean;
 
   let englishKeyset = new EnglishKeySet();
-  let keyboard = new Keyboard([englishKeyset]);
+  let keyboard = new Keyboard([englishKeyset], () => gradio.dispatch("submit"));
 
   $: if (value === null) value = "";
 
@@ -73,7 +73,7 @@
       bind:this={keyboard.targetElement}
       {placeholder}
       disabled={!interactive}
-      dir={keyboard.isCurLanguageRTL() ? "rtl" : "ltr"}
+      dir={keyboard.isCurrentLanguageRTL() ? "rtl" : "ltr"}
     />
     <p class="transliteration" bind:this={keyboard.transliteration}></p>
   </label>
@@ -108,7 +108,7 @@
           <div
             class="key svelte-cmf5ev secondary {key.isSpecial ? 'special' : ''}"
             style="grid-column: span {key.span}"
-            id="key-{key.middleStr}"
+            id="key-{key.upperText+key.middleText+key.lowerText}"
             on:mousedown={(e) => {
               key.onMouseDown(e);
               handleKeysChange();
@@ -122,7 +122,7 @@
                 ? 'active-key'
                 : 'inactive-key'}"
             >
-              {key.upperStr == "" ? "\u200c" : key.upperStr}
+              {key.upperText == "" ? "\u200c" : key.upperText}
             </div>
 
             <div
@@ -130,7 +130,7 @@
                 ? 'active-key'
                 : 'inactive-key'}"
             >
-              {key.middleStr}
+              {key.middleText}
             </div>
 
             <div
@@ -138,7 +138,7 @@
                 ? 'active-key'
                 : 'inactive-key'}"
             >
-              {key.lowerStr == "" ? "\u200c" : key.lowerStr}
+              {key.lowerText == "" ? "\u200c" : key.lowerText}
             </div>
           </div>
         {/each}

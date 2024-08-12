@@ -1,14 +1,6 @@
-import type { Gradio } from "@gradio/utils";
-
 import { KeySet, Key } from "./keysets/keyset";
 import { IKeyboard } from "./ikeyboard";
 
-
-export let gradio: Gradio<{
-    change: never;
-    submit: never;
-    input: never;
-}>;
 
 export class Keyboard implements IKeyboard {
 
@@ -17,11 +9,20 @@ export class Keyboard implements IKeyboard {
     transliteration: HTMLParagraphElement;
     container: boolean = true;
     expanded: boolean = true;
+    onEnter: Function | null = null;
 
     private languageToKeysetMap: object = {};
     selectedLanguage: string = "";
 
-    constructor(languageKeySets: KeySet[]) {
+    /**
+     * 
+     * @param languageKeySets - List of Keysets to add to keyboard
+     * @param onEnter - Function to execute when the "Enter" key is pressed. Defaults to null which means add a new line.
+     */
+    constructor(languageKeySets: KeySet[], onEnter: Function | null = null) {
+
+        this.onEnter = onEnter;
+
         languageKeySets.forEach((keyset) => {
             this.languageToKeysetMap[keyset.languageName] = keyset;
             this.languageToKeysetMap[keyset.languageName].containingKeyboard = this;
@@ -38,7 +39,7 @@ export class Keyboard implements IKeyboard {
         return this.languageToKeysetMap[this.selectedLanguage].getKeys();
     }
 
-    isCurLanguageRTL() {
+    isCurrentLanguageRTL() {
         return this.languageToKeysetMap[this.selectedLanguage].isLanguageRTL();
     }
 

@@ -9,8 +9,10 @@ export class EnglishKeySet implements KeySet {
     private shiftedKeys: Key[][] = [];
     private unShiftedKeys: Key[][] = [];
     private capsKeys: Key[][] = [];
+
     languageName: string = "English";
     containingKeyboard: IKeyboard;
+    onEnter: Function | null = null;
 
     constructor() {
 
