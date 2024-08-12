@@ -1,6 +1,6 @@
 import type { Gradio } from "@gradio/utils";
 
-import { KeySet, Key } from "./keyset";
+import { KeySet, Key } from "./keysets/keyset";
 import { IKeyboard } from "./ikeyboard";
 
 
@@ -18,16 +18,16 @@ export class Keyboard implements IKeyboard {
     container: boolean = true;
     expanded: boolean = true;
 
-    private langToKeysetMap: object = {};
+    private languageToKeysetMap: object = {};
     selectedLanguage: string = "";
 
     constructor(languageKeySets: KeySet[]) {
         languageKeySets.forEach((keyset) => {
-            this.langToKeysetMap[keyset.languageName] = keyset;
-            this.langToKeysetMap[keyset.languageName].containingKeyboard = this;
+            this.languageToKeysetMap[keyset.languageName] = keyset;
+            this.languageToKeysetMap[keyset.languageName].containingKeyboard = this;
         });
 
-        this.selectedLanguage = Object.keys(this.langToKeysetMap)[0];
+        this.selectedLanguage = Object.keys(this.languageToKeysetMap)[0];
     }
 
     toggle(): void {
@@ -35,14 +35,14 @@ export class Keyboard implements IKeyboard {
     }
 
     getKeys(): Key[][] {
-        return this.langToKeysetMap[this.selectedLanguage].getKeys();
+        return this.languageToKeysetMap[this.selectedLanguage].getKeys();
     }
 
     isCurLanguageRTL() {
-        return this.langToKeysetMap[this.selectedLanguage].isLanguageRTL();
+        return this.languageToKeysetMap[this.selectedLanguage].isLanguageRTL();
     }
 
     getAllLanguageNames(): string[] {
-        return Object.keys(this.langToKeysetMap);
+        return Object.keys(this.languageToKeysetMap);
     }
 }
