@@ -39,27 +39,17 @@
   }
 
   let keys = keyboard.getKeys();
+  let transliterationText = keyboard.transliterationText;
 
-  function handleKeysChange(): void {
+  function updateKeyboard(): void {
     keys = keyboard.getKeys();
+    transliterationText = keyboard.transliterationText;
   }
 </script>
 
-<Block
-  {visible}
-  {elem_id}
-  {elem_classes}
-  {scale}
-  {min_width}
-  allow_overflow={false}
-  padding={true}
->
+<Block {visible} {elem_id} {elem_classes} {scale} {min_width} allow_overflow={false} padding={true}>
   {#if loading_status}
-    <StatusTracker
-      autoscroll={gradio.autoscroll}
-      i18n={gradio.i18n}
-      {...loading_status}
-    />
+    <StatusTracker autoscroll={gradio.autoscroll} i18n={gradio.i18n} {...loading_status} />
   {/if}
 
   <label class="container">
@@ -75,21 +65,20 @@
       disabled={!interactive}
       dir={keyboard.isCurrentLanguageRTL() ? "rtl" : "ltr"}
     />
-    <p class="transliteration" bind:this={keyboard.transliteration}></p>
+
+    <p class="transliteration">
+      Transliteration<br/>
+      {transliterationText ? transliterationText : ""}
+    </p>
   </label>
 
   <div class="dropdown">
-    <!-- <button on:click={keyboard.toggle.bind(keyboard)} class="expand-button"> -->
     <button on:click={toggle} class="expand-button">
       <span class="expand-symbol">⌨</span>
       <span class="description">On-Screen Keyboard</span>
     </button>
     <hr class="divider" />
-    <select
-      id="language"
-      class="language-selector"
-      bind:value={keyboard.selectedLanguage}
-    >
+    <select id="language" class="language-selector" bind:value={keyboard.selectedLanguage}>
       {#each keyboard.getAllLanguageNames() as language}
         <option value={language}>{language}</option>
       {/each}
@@ -97,47 +86,30 @@
   </div>
 
   {#if expanded}
-    <div
-      class="keyboard"
-      transition:fly={{ y: 20, duration: 200 }}
-      on:input={handleKeysChange}
-    >
+    <div class="keyboard" transition:fly={{ y: 20, duration: 200 }}>
       {#each keys as row, rowIndex}
-        <!-- {#each keys as row, rowIndex} -->
         {#each row as key, keyIndex}
           <div
             class="key svelte-cmf5ev secondary {key.isSpecial ? 'special' : ''}"
             style="grid-column: span {key.span}"
-            id="key-{key.upperText+key.middleText+key.lowerText}"
+            id="key-{key.upperText + key.middleText + key.lowerText}"
             on:mousedown={(e) => {
               key.onMouseDown(e);
-              handleKeysChange();
+              updateKeyboard();
             }}
             on:mouseup={(e) => key.onMouseUp(e)}
             role="button"
             tabindex="0"
           >
-            <div
-              class="upper {key.primaryStrIdx == 0
-                ? 'active-key'
-                : 'inactive-key'}"
-            >
+            <div class="upper {key.primaryStrIdx == 0 ? 'active-key' : 'inactive-key'}">
               {key.upperText == "" ? "\u200c" : key.upperText}
             </div>
 
-            <div
-              class="middle {key.primaryStrIdx == 1
-                ? 'active-key'
-                : 'inactive-key'}"
-            >
+            <div class="middle {key.primaryStrIdx == 1 ? 'active-key' : 'inactive-key'}">
               {key.middleText}
             </div>
 
-            <div
-              class="lower {key.primaryStrIdx == 2
-                ? 'active-key'
-                : 'inactive-key'}"
-            >
+            <div class="lower {key.primaryStrIdx == 2 ? 'active-key' : 'inactive-key'}">
               {key.lowerText == "" ? "\u200c" : key.lowerText}
             </div>
           </div>

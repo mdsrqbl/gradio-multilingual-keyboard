@@ -44,11 +44,11 @@ if __name__ == "__main__":
 
 edit `frontend/index.svelte`:
 - while a button is active or a corresponding key is down, turn it primary
-- submit button does not work after text is written via virtual keyboard
+- [x] submit button does not work after text is written via virtual keyboard
 - map physical keys to unicode
 - update transliteration for keystrokes, backspace, cut, paste, etc.
-- prepend a transliteration label
-- When <kbd>shift</kbd> is pressed on virtual keyboard, keep it active until another key is pressed
+- [x] prepend a transliteration label
+- [x] When <kbd>shift</kbd> is pressed on virtual keyboard, keep it active until another key is pressed
 - if <kbd>shift</kbd> or <kbd>Caps</kbd> is pressed on virtual keyboard, physical keyboard should also write accordingly
 - add a switch for standard and phonetic keyboards for each language
 - add support for top 50 languages, you may use a library.

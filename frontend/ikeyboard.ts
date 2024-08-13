@@ -5,6 +5,7 @@ export interface IKeyboard {
 
     states: object;
     targetElement: string | HTMLElement;
+    transliterationText: string;
     container: boolean;
     expanded: boolean;
 

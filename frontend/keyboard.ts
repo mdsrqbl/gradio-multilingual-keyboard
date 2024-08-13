@@ -6,7 +6,7 @@ export class Keyboard implements IKeyboard {
 
     states: object = {};
     targetElement: HTMLElement;
-    transliteration: HTMLParagraphElement;
+    transliterationText: string;
     container: boolean = true;
     expanded: boolean = true;
     onEnter: Function | null = null;
@@ -29,6 +29,7 @@ export class Keyboard implements IKeyboard {
         });
 
         this.selectedLanguage = Object.keys(this.languageToKeysetMap)[0];
+        this.transliterationText = "";
     }
 
     toggle(): void {
