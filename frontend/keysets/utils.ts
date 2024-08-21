@@ -1,16 +1,21 @@
 import { charToCodesMapping } from "../char-codes";
 import { KeySet } from "./keyset";
 
+const simpleEnTextToSpans: Object = {
+  Space: 14,
+  Shift: 5,
+  Enter: 4,
+  Delete: 4,
+  Caps: 4,
+  Alt: 4,
+  Ctrl: 4,
+  Tab: 3,
+  "\\": 3,
+  "|": 3,
+};
+
 export function getSimpleKeyboardKeySpan(key: string): number {
-  return key === "Space"
-    ? 14
-    : key === "Shift"
-    ? 5
-    : key === "Delete" || key === "Enter" || key === "Ctrl" || key === "Alt" || key === "Caps"
-    ? 4
-    : key === "Tab" || key === "\\" || key === "|"
-    ? 3
-    : 2;
+  return simpleEnTextToSpans[key] || 2;
 }
 
 export function isSpecialKey(key: string): boolean {
