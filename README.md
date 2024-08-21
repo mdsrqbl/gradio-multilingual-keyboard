@@ -43,15 +43,20 @@ if __name__ == "__main__":
 ## To Do
 
 edit `frontend/index.svelte`:
-- while a button is active or a corresponding key is down, turn it primary
-- [x] submit button does not work after text is written via virtual keyboard
-- map physical keys to unicode
-- update transliteration for keystrokes, backspace, cut, paste, etc.
+
+- [ ] while a button is active or a corresponding key is down, turn it primary
+- [ ] add guideline in readme to extend for new languages.
+- [ ] move transliteration below keyboard toggle button.
+- [x] Bug: submit button does not work after text is written via virtual keyboard
+- [ ] allow user to link their textArea component or their languageDropDown with this keyboard
+- [ ] pass the value of text box _and dropdown_ as inputs to the submit button (update examples accordingly)
+- [ ] map physical keys to unicode
+- [ ] update transliteration for keystrokes, backspace, cut, paste, etc.
 - [x] prepend a transliteration label
 - [x] When <kbd>shift</kbd> is pressed on virtual keyboard, keep it active until another key is pressed
-- if <kbd>shift</kbd> or <kbd>Caps</kbd> is pressed on virtual keyboard, physical keyboard should also write accordingly
-- add a switch for standard and phonetic keyboards for each language
-- add support for top 50 languages, you may use a library.
+- [ ] if <kbd>shift</kbd> or <kbd>Caps</kbd> is pressed on virtual keyboard, physical keyboard should also write accordingly
+- [ ] add a switch for standard and phonetic keyboards for each language
+- [ ] add support for top 50 languages, you may use a library.
 
 ## Dev Setup
 
