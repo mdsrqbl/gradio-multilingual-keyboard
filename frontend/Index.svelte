@@ -9,6 +9,7 @@
   import { fly } from "svelte/transition";
 
   import { Keyboard } from "./keyboard";
+  import { KeySet } from "./keysets/keyset";
   import { EnglishKeySet } from "./keysets/simple-english-keyset/english-keyset";
 
   export let gradio: Gradio<{
@@ -28,8 +29,29 @@
   export let loading_status: LoadingStatus | undefined = undefined;
   export let interactive: boolean;
 
-  let englishKeyset = new EnglishKeySet();
-  let keyboard = new Keyboard([englishKeyset], () => gradio.dispatch("submit"));
+  export let languages: string[] | undefined = undefined;
+  // export let selected_language: string | undefined = undefined;
+  const allSupportedLanguages = ["english"];
+
+  if (!languages) {
+    languages = allSupportedLanguages;
+  } else {
+    languages = languages.filter((language) => allSupportedLanguages.includes(language));
+  }
+
+  // if(!languages.includes(selected_language)) {
+  //   selected_language = languages[0];
+  // }
+
+  let LanguageNameToKeysetClass = {
+    english: EnglishKeySet,
+  };
+
+  let keysets: KeySet[] = languages.map((language) => {
+    return new LanguageNameToKeysetClass[language]();
+  });
+
+  let keyboard = new Keyboard(keysets);
 
   $: if (value === null) value = "";
 
@@ -67,7 +89,7 @@
     />
 
     <p class="transliteration">
-      Transliteration<br/>
+      <strong>Transliteration:</strong><br />
       {transliterationText ? transliterationText : ""}
     </p>
   </label>
