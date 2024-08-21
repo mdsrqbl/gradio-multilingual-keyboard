@@ -1,20 +1,18 @@
 import { Key } from "./keysets/keyset";
 
-
 export interface IKeyboard {
+  states: object;
+  targetElement: string | HTMLElement;
+  transliterationText: string;
+  container: boolean;
+  expanded: boolean;
 
-    states: object;
-    targetElement: string | HTMLElement;
-    transliterationText: string;
-    container: boolean;
-    expanded: boolean;
+  selectedLanguage: string;
 
-    selectedLanguage: string;
+  onEnter: Function | null;
 
-    onEnter: Function | null;
-
-    toggle(): void;
-    getKeys(): Key[][];
-    isCurrentLanguageRTL(): boolean;
-    getAllLanguageNames(): string[];
+  toggle(): void;
+  getKeys(): Key[][];
+  isCurrentLanguageRTL(): boolean;
+  getAllLanguageNames(): string[];
 }
