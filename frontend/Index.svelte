@@ -6,8 +6,11 @@
   import { Block } from "@gradio/atoms";
   import { StatusTracker } from "@gradio/statustracker";
   import type { LoadingStatus } from "@gradio/statustracker";
-  import { tick } from "svelte";
   import { fly } from "svelte/transition";
+
+  import { Keyboard } from "./keyboard";
+  import { KeySet } from "./keysets/keyset";
+  import { EnglishKeySet } from "./keysets/simple-english-keyset/english-keyset";
 
   export let gradio: Gradio<{
     change: never;
@@ -24,173 +27,46 @@
   export let scale: number | null = null;
   export let min_width: number | undefined = undefined;
   export let loading_status: LoadingStatus | undefined = undefined;
-  export let value_is_output = false;
   export let interactive: boolean;
-  export let languages: string[] = ["english", "urdu", "hindi"];
 
-  let textAreaEl: HTMLTextAreaElement | HTMLInputElement;
-  let transliteration: HTMLParagraphElement;
-  const container = true;
-  let isShiftDown = false;
-  let isCapsLockOn = false;
-  let currentLanguage = languages[0];
+  export let languages: string[] | undefined = undefined;
+  // export let selected_language: string | undefined = undefined;
+  const allSupportedLanguages = ["english"];
 
-  function handle_change(): void {
-    gradio.dispatch("change");
-    if (!value_is_output) {
-      gradio.dispatch("input");
-    }
+  if (!languages) {
+    languages = allSupportedLanguages;
+  } else {
+    languages = languages.filter((language) => allSupportedLanguages.includes(language));
   }
 
-  async function handle_keypress(e: KeyboardEvent): Promise<void> {
-    await tick();
-    if (e.key === "Enter") {
-      e.preventDefault();
-      gradio.dispatch("submit");
-    }
-  }
+  // if(!languages.includes(selected_language)) {
+  //   selected_language = languages[0];
+  // }
 
-  function handle_button_press(key: string, e: KeyboardEvent): void {
-    isShiftDown = e.shiftKey;
-    isCapsLockOn = e.getModifierState("CapsLock");
+  let LanguageNameToKeysetClass = {
+    english: EnglishKeySet,
+  };
 
-    if (key.length === 1) {
-      textAreaEl.value +=
-        languageKeyMap[currentLanguage][isCapsLockOn || isShiftDown ? "shift" : "notShift"][key.toLowerCase()] ||
-        (isCapsLockOn || isShiftDown ? key.toUpperCase() : key.toLowerCase());
-      transliteration.textContent += isCapsLockOn || isShiftDown ? key.toUpperCase() : key.toLowerCase();
-    } else if (key === "Space") {
-      textAreaEl.value += " ";
-      transliteration.textContent += " ";
-    } else if (key === "Delete") {
-      textAreaEl.value = textAreaEl.value.slice(0, -1);
-      transliteration.textContent = transliteration.textContent.slice(0, -1);
-    } else if (key === "Enter") {
-      gradio.dispatch("submit");
-    }
-  }
+  let keysets: KeySet[] = languages.map((language) => {
+    return new LanguageNameToKeysetClass[language]();
+  });
+
+  let keyboard = new Keyboard(keysets);
 
   $: if (value === null) value = "";
 
-  // When the value changes, dispatch the change event via handle_change()
-  // See the docs for an explanation: https://svelte.dev/docs/svelte-components#script-3-$-marks-a-statement-as-reactive
-  $: value, handle_change();
-
-  let expanded = false;
-
+  let expanded = keyboard.expanded;
   function toggle() {
     expanded = !expanded;
   }
-  const keys = [
-    ["`", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=", "Delete"],
-    ["Tab", "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "[", "]", "\\"],
-    ["Caps", "A", "S", "D", "F", "G", "H", "J", "K", "L", ";", "'", "Enter"],
-    ["Shift", "Z", "X", "C", "V", "B", "N", "M", ",", ".", "/", "Shift"],
-    ["Ctrl", "Alt", "Space", "Alt", "Ctrl"],
-  ];
-  function isSpecialKey(key: string): boolean {
-    return ["Delete", "Enter", "Shift", "Caps", "Tab", "Ctrl", "Alt", "Win", "Space"].includes(key);
+
+  let keys = keyboard.getKeys();
+  let transliterationText = keyboard.transliterationText;
+
+  function updateKeyboard(): void {
+    keys = keyboard.getKeys();
+    transliterationText = keyboard.transliterationText;
   }
-  function getKeySpan(key: string): number {
-    return key === "Space"
-      ? 14
-      : key === "Shift"
-        ? 5
-        : key === "Delete" || key === "Enter" || key === "Ctrl" || key === "Alt" || key === "Caps"
-          ? 4
-          : key === "Tab" || key === "\\"
-            ? 3
-            : 2;
-  }
-  function isLanguageRTL(language: string): boolean {
-    return ["urdu", "arabic", "farsi"].includes(language.toLowerCase());
-  }
-  const languageKeyMap = {
-    english: {
-      shift: {},
-      notShift: {},
-    },
-    urdu: {
-      shift: {
-        r: "ڑ",
-        t: "ٹ",
-        y: "َ",
-        u: "ئ",
-        i: "ِ",
-        p: "ُ",
-        a: "آ",
-        s: "ص",
-        d: "ڈ",
-        f: "أ",
-        g: "غ",
-        h: "ھ",
-        j: "ض",
-        k: "خ",
-        z: "ذ",
-        x: "ژ",
-        c: "ث",
-        v: "ظ",
-        n: "ں",
-      },
-      notShift: {
-        "1": "۱",
-        "2": "۲",
-        "3": "۳",
-        "4": "۴",
-        "5": "۵",
-        "6": "٦",
-        "7": "۷",
-        "8": "۸",
-        "9": "۹",
-        "0": "۰",
-        q: "ق",
-        w: "و",
-        e: "ع",
-        r: "ر",
-        t: "ت",
-        y: "ے",
-        u: "ء",
-        i: "ی",
-        o: "ہ",
-        p: "پ",
-        a: "ا",
-        s: "س",
-        d: "د",
-        f: "ف",
-        g: "گ",
-        h: "ح",
-        j: "ج",
-        k: "ک",
-        l: "ل",
-        z: "ز",
-        x: "ش",
-        c: "چ",
-        v: "ط",
-        b: "ب",
-        n: "ن",
-        m: "م",
-        ",": "،",
-        ".": "۔",
-        "?": "؟",
-        ";": "؛",
-      },
-    },
-    hindi: {
-      shift: {},
-      notShift: {
-        "1": "१",
-        "2": "२",
-        "3": "३",
-        "4": "४",
-        "5": "५",
-        "6": "६",
-        "7": "७",
-        "8": "८",
-        "9": "९",
-        "0": "०",
-      },
-    },
-  };
 </script>
 
 <Block {visible} {elem_id} {elem_classes} {scale} {min_width} allow_overflow={false} padding={true}>
@@ -198,7 +74,7 @@
     <StatusTracker autoscroll={gradio.autoscroll} i18n={gradio.i18n} {...loading_status} />
   {/if}
 
-  <label class:container>
+  <label class="container">
     <BlockTitle {show_label} info={undefined}>{label}</BlockTitle>
 
     <input
@@ -206,13 +82,16 @@
       type="text"
       class="scroll-hide"
       bind:value
-      bind:this={textAreaEl}
+      bind:this={keyboard.targetElement}
       {placeholder}
       disabled={!interactive}
-      dir={isLanguageRTL(currentLanguage) ? "rtl" : "ltr"}
-      on:keypress={handle_keypress}
+      dir={keyboard.isCurrentLanguageRTL() ? "rtl" : "ltr"}
     />
-    <p class="transliteration" bind:this={transliteration}></p>
+
+    <p class="transliteration">
+      <strong>Transliteration:</strong><br />
+      {transliterationText ? transliterationText : ""}
+    </p>
   </label>
 
   <div class="dropdown">
@@ -221,9 +100,9 @@
       <span class="description">On-Screen Keyboard</span>
     </button>
     <hr class="divider" />
-    <select id="language" class="language-selector" bind:value={currentLanguage}>
-      {#each languages as language}
-        <option value={language.toLowerCase()}>{language}</option>
+    <select id="language" class="language-selector" bind:value={keyboard.selectedLanguage}>
+      {#each keyboard.getAllLanguageNames() as language}
+        <option value={language}>{language}</option>
       {/each}
     </select>
   </div>
@@ -233,34 +112,27 @@
       {#each keys as row, rowIndex}
         {#each row as key, keyIndex}
           <div
-            class="key svelte-cmf5ev secondary {isSpecialKey(key) ? 'special' : ''}"
-            style="grid-column: span {getKeySpan(key)}"
-            id="key-{key.toLowerCase()}"
-            on:click={(e) => handle_button_press(key, e)}
-            on:keypress={(e) => (e.key === "Enter" ? handle_button_press(key, e) : null)}
+            class="key svelte-cmf5ev secondary {key.isSpecial ? 'special' : ''}"
+            style="grid-column: span {key.span}"
+            id="key-{key.upperText + key.middleText + key.lowerText}"
+            on:mousedown={(e) => {
+              key.onMouseDown(e);
+              updateKeyboard();
+            }}
+            on:mouseup={(e) => key.onMouseUp(e)}
             role="button"
             tabindex="0"
           >
-            <div
-              class="upper {(isShiftDown || isCapsLockOn) && currentLanguage != 'english'
-                ? 'active-key'
-                : 'inactive-key'}"
-            >
-              {!isSpecialKey(key) ? languageKeyMap[currentLanguage]["shift"][key.toLowerCase()] || "\u200c" : "\u200c"}
+            <div class="upper {key.primaryStrIdx == 0 ? 'active-key' : 'inactive-key'}">
+              {key.upperText == "" ? "\u200c" : key.upperText}
             </div>
 
-            <div class="middle {currentLanguage == 'english' || isSpecialKey(key) ? 'active-key' : 'inactive-key'}">
-              {key}
+            <div class="middle {key.primaryStrIdx == 1 ? 'active-key' : 'inactive-key'}">
+              {key.middleText}
             </div>
 
-            <div
-              class="lower {isShiftDown || isCapsLockOn || currentLanguage == 'english'
-                ? 'inactive-key'
-                : 'active-key'}"
-            >
-              {!isSpecialKey(key)
-                ? languageKeyMap[currentLanguage]["notShift"][key.toLowerCase()] || "\u200c"
-                : "\u200c"}
+            <div class="lower {key.primaryStrIdx == 2 ? 'active-key' : 'inactive-key'}">
+              {key.lowerText == "" ? "\u200c" : key.lowerText}
             </div>
           </div>
         {/each}
