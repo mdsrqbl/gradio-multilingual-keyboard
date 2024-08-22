@@ -53,7 +53,7 @@ export class UrduKeySet implements KeySet {
         let middleText = key_str;
         let selectedPrimaryTextIdx = 1;
 
-        if (key_str.length == 1) {
+        if (key_str.length <= 1) {
           middleText = englishHintKeysLayout[rowidx][keyidx] ?? "";
           upperText = shiftedKeysLayout[rowidx][keyidx] ?? "";
           lowerText = unshiftedKeysLayout[rowidx][keyidx] ?? "";
