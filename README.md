@@ -37,7 +37,7 @@ if __name__ == "__main__":
 ## Supported Languages
 
 - [x] English
-- [ ] Urdu
+- [x] Urdu
 - [ ] Hindi
 
 ## To Do
@@ -46,7 +46,7 @@ edit `frontend/index.svelte`:
 
 - [ ] while a button is active or a corresponding key is down, turn it primary
 - [ ] add guideline in readme to extend for new languages.
-- [ ] move transliteration below keyboard toggle button.
+- [x] move transliteration below keyboard toggle button.
 - [x] Bug: submit button does not work after text is written via virtual keyboard
 - [ ] allow user to link their textArea component or their languageDropDown with this keyboard
 - [ ] pass the value of text box _and dropdown_ as inputs to the submit button (update examples accordingly)

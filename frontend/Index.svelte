@@ -90,11 +90,6 @@
       disabled={!interactive}
       dir={keyboard.isCurrentLanguageRTL() ? "rtl" : "ltr"}
     />
-
-    <p class="transliteration">
-      <strong>Transliteration:</strong><br />
-      {transliterationText ? transliterationText : ""}
-    </p>
   </label>
 
   <div class="dropdown">
@@ -111,6 +106,10 @@
   </div>
 
   {#if expanded}
+    <p class="transliteration">
+      <strong>Transliteration:</strong><br />
+      {transliterationText ? transliterationText : ""}
+    </p>
     <div class="keyboard" transition:fly={{ y: 20, duration: 200 }}>
       {#each keys as row, rowIndex}
         {#each row as key, keyIndex}
@@ -190,7 +189,7 @@
     color: var(--input-placeholder-color);
   }
   .transliteration {
-    margin-top: 10px;
+    margin-bottom: 15px;
   }
   .dropdown {
     padding: 1px;
