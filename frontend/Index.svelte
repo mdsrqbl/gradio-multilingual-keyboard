@@ -11,6 +11,7 @@
   import { Keyboard } from "./keyboard";
   import { KeySet } from "./keysets/keyset";
   import { EnglishKeySet } from "./keysets/simple-english-keyset/english-keyset";
+  import { UrduKeySet } from "./keysets/simple-urdu-keyset/urdu-keyset";
 
   export let gradio: Gradio<{
     change: never;
@@ -31,7 +32,7 @@
 
   export let languages: string[] | undefined = undefined;
   // export let selected_language: string | undefined = undefined;
-  const allSupportedLanguages = ["english"];
+  const allSupportedLanguages = ["english", "urdu"];
 
   if (!languages) {
     languages = allSupportedLanguages;
@@ -45,6 +46,7 @@
 
   let LanguageNameToKeysetClass = {
     english: EnglishKeySet,
+    urdu: UrduKeySet,
   };
 
   let keysets: KeySet[] = languages.map((language) => {
@@ -57,16 +59,17 @@
 
   let expanded = keyboard.expanded;
   function toggle() {
-    expanded = !expanded;
+    keyboard.toggle();
+    expanded = keyboard.expanded;
   }
 
   let keys = keyboard.getKeys();
   let transliterationText = keyboard.transliterationText;
-
   function updateKeyboard(): void {
     keys = keyboard.getKeys();
     transliterationText = keyboard.transliterationText;
   }
+
 </script>
 
 <Block {visible} {elem_id} {elem_classes} {scale} {min_width} allow_overflow={false} padding={true}>
@@ -87,11 +90,6 @@
       disabled={!interactive}
       dir={keyboard.isCurrentLanguageRTL() ? "rtl" : "ltr"}
     />
-
-    <p class="transliteration">
-      <strong>Transliteration:</strong><br />
-      {transliterationText ? transliterationText : ""}
-    </p>
   </label>
 
   <div class="dropdown">
@@ -100,7 +98,7 @@
       <span class="description">On-Screen Keyboard</span>
     </button>
     <hr class="divider" />
-    <select id="language" class="language-selector" bind:value={keyboard.selectedLanguage}>
+    <select id="language" class="language-selector" bind:value={keyboard.selectedLanguage} on:change={updateKeyboard}>
       {#each keyboard.getAllLanguageNames() as language}
         <option value={language}>{language}</option>
       {/each}
@@ -108,18 +106,29 @@
   </div>
 
   {#if expanded}
+    <p class="transliteration">
+      <strong>Transliteration:</strong><br />
+      {transliterationText ? transliterationText : ""}
+    </p>
     <div class="keyboard" transition:fly={{ y: 20, duration: 200 }}>
       {#each keys as row, rowIndex}
         {#each row as key, keyIndex}
           <div
-            class="key svelte-cmf5ev secondary {key.isSpecial ? 'special' : ''}"
+            class="key svelte-cmf5ev {key.states["pressed"] ? "pressed-key" : "secondary"} {key.isSpecial ? 'special' : ''}"
             style="grid-column: span {key.span}"
             id="key-{key.upperText + key.middleText + key.lowerText}"
             on:mousedown={(e) => {
               key.onMouseDown(e);
               updateKeyboard();
             }}
-            on:mouseup={(e) => key.onMouseUp(e)}
+            on:mouseup={(e) => {
+              key.onMouseUp(e);
+              updateKeyboard();
+            }}
+            on:mouseleave={(e) => {
+              key.setUnPressed();
+              updateKeyboard();
+            }}
             role="button"
             tabindex="0"
           >
@@ -180,7 +189,7 @@
     color: var(--input-placeholder-color);
   }
   .transliteration {
-    margin-top: 10px;
+    margin-bottom: 15px;
   }
   .dropdown {
     padding: 1px;
@@ -253,5 +262,8 @@
   .inactive-key {
     color: gray;
     font-size: 0.7rem;
+  }
+  .pressed-key {
+    background-color: orange;;
   }
 </style>

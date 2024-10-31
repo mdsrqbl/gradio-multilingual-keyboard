@@ -1,6 +1,13 @@
 import { IKeyboard } from "../../ikeyboard";
 import { Key, KeySet } from "../keyset";
-import { getSimpleKeyboardKeySpan, getMouseDownFunction, isSpecialKey } from "../utils";
+import {
+  getSimpleKeyboardKeySpan,
+  getMouseDownFunction,
+  isSpecialKey,
+  getKeyDownFunction,
+  getKeyUpFunction,
+  getMouseUpFunction,
+} from "../utils";
 import { shiftedKeysLayout, unshiftedKeysLayout, capsKeysLayout } from "./simple-english-keys-layout";
 
 export class EnglishKeySet implements KeySet {
@@ -26,11 +33,9 @@ export class EnglishKeySet implements KeySet {
         let is_special = isSpecialKey(key_str);
 
         let onMouseDownFunction = getMouseDownFunction(key_str, this);
-
-        // TODO implement later as needed.
-        let onDownFunction = () => {};
-        let onUpFunction = () => {};
-        let onMouseUpFunction = () => {};
+        let onMouseUpFunction = getMouseUpFunction(key_str, this);
+        let onDownFunction = getKeyDownFunction(key_str, this);
+        let onUpFunction = getKeyUpFunction(key_str, this);
 
         keys.push(
           new Key(

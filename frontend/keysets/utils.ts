@@ -1,5 +1,5 @@
 import { charToCodesMapping } from "../char-codes";
-import { KeySet } from "./keyset";
+import { Key, KeySet } from "./keyset";
 
 const simpleEnTextToSpans: Object = {
   Space: 14,
@@ -38,13 +38,38 @@ function getModifiedValueOnKeyPress(curValue: string, key_str: string, states: o
   return curValue;
 }
 
-export function getMouseDownFunction(
+export function getMouseDownFunction(key_str: string, callingKeyset: KeySet): Function {
+  let customMouseDownFn = (callingKey: Key) => {
+    callingKey.setPressed();
+
+    if (callingKeyset.containingKeyboard.targetElement instanceof HTMLElement) {
+      let keyDownEventInitDict = {
+        key: key_str,
+        ctrlKey: Boolean(callingKeyset.containingKeyboard.states["ctrl"]),
+        shiftKey: Boolean(callingKeyset.containingKeyboard.states["shift"]),
+        altKey: Boolean(callingKeyset.containingKeyboard.states["alt"]),
+      };
+      let codeMappings = charToCodesMapping[key_str];
+      if (codeMappings) {
+        keyDownEventInitDict["code"] = codeMappings["code"];
+        keyDownEventInitDict["keyCode"] = codeMappings["keyCode"]; // for backward compatibility
+      }
+      callingKeyset.containingKeyboard.targetElement.dispatchEvent(new KeyboardEvent("keydown", keyDownEventInitDict));
+    }
+  };
+
+  return customMouseDownFn;
+}
+
+export function getMouseUpFunction(
   key_str: string,
   callingKeyset: KeySet,
   transliterate: boolean = true,
   transliterationCharMap: object = {}
 ): Function {
-  let customMouseDownFn = () => {
+  let customMouseUpFn = (callingKey: Key) => {
+    callingKey.setUnPressed();
+
     if (key_str === "Enter" && callingKeyset.containingKeyboard.onEnter) {
       callingKeyset.containingKeyboard.onEnter();
       return;
@@ -82,18 +107,31 @@ export function getMouseDownFunction(
 
     if (callingKeyset.containingKeyboard.targetElement instanceof HTMLElement) {
       callingKeyset.containingKeyboard.targetElement.dispatchEvent(new Event("input")); // notify value update
-      callingKeyset.containingKeyboard.targetElement.dispatchEvent(
-        new KeyboardEvent("keydown", {
-          key: key_str,
-          code: charToCodesMapping[key_str]["code"],
-          keyCode: charToCodesMapping[key_str]["keyCode"], // for backward compatibility
-          ctrlKey: Boolean(callingKeyset.containingKeyboard.states["ctrl"]),
-          shiftKey: Boolean(callingKeyset.containingKeyboard.states["shift"]),
-          altKey: Boolean(callingKeyset.containingKeyboard.states["alt"]),
-        })
-      );
+
+      let keyUpEventInitDict = {
+        key: key_str,
+        ctrlKey: Boolean(callingKeyset.containingKeyboard.states["ctrl"]),
+        shiftKey: Boolean(callingKeyset.containingKeyboard.states["shift"]),
+        altKey: Boolean(callingKeyset.containingKeyboard.states["alt"]),
+      };
+      let codeMappings = charToCodesMapping[key_str];
+      if (codeMappings) {
+        keyUpEventInitDict["code"] = codeMappings["code"];
+        keyUpEventInitDict["keyCode"] = codeMappings["keyCode"]; // for backward compatibility
+      }
+      callingKeyset.containingKeyboard.targetElement.dispatchEvent(new KeyboardEvent("keyup", keyUpEventInitDict));
     }
   };
 
-  return customMouseDownFn;
+  return customMouseUpFn;
+}
+
+export function getKeyDownFunction(key_str: string, callingKeyset: KeySet): Function {
+  let customKeyDownFn = (callingKey: Key) => {};
+  return customKeyDownFn;
+}
+
+export function getKeyUpFunction(key_str: string, callingKeyset: KeySet): Function {
+  let customKeyUpFn = (callingKey: Key) => {};
+  return customKeyUpFn;
 }

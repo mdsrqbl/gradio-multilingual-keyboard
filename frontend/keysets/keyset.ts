@@ -11,7 +11,9 @@ class Key {
   onKeyUp: Function = () => {};
   onMouseDown: Function = () => {};
   onMouseUp: Function = () => {};
-  states: object = {};
+  states: object = {
+    pressed: false,
+  };
 
   constructor(
     upperText: string = "",
@@ -31,10 +33,26 @@ class Key {
     this.primaryStrIdx = primaryStrIdx;
     this.isSpecial = isSpecial;
     this.span = span;
-    this.onKeyDown = OnKeyDown;
-    this.onKeyUp = OnKeyUp;
-    this.onMouseDown = onMouseDown;
-    this.onMouseUp = onMouseUp;
+    this.onKeyDown = () => {
+      OnKeyDown(this);
+    };
+    this.onKeyUp = () => {
+      OnKeyUp(this);
+    };
+    this.onMouseDown = () => {
+      onMouseDown(this);
+    };
+    this.onMouseUp = () => {
+      onMouseUp(this);
+    };
+  }
+
+  setPressed(): void {
+    this.states["pressed"] = true;
+  }
+
+  setUnPressed(): void {
+    this.states["pressed"] = false;
   }
 }
 
